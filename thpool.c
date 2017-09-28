@@ -195,6 +195,8 @@ int thpool_add_work(thpool_* thpool_p, void (*function_p)(void*), void* arg_p){
 
 /* Wait until all jobs have finished */
 void thpool_wait(thpool_* thpool_p){
+	/* No need to destory if it's NULL */
+	if (thpool_p == NULL) return ;
 	pthread_mutex_lock(&thpool_p->thcount_lock);
 	while (thpool_p->jobqueue.len || thpool_p->num_threads_working) {
 		pthread_cond_wait(&thpool_p->threads_all_idle, &thpool_p->thcount_lock);
